@@ -144,15 +144,12 @@ class MainApp(QWidget):
         self.timer.start(1000)  # Actualización cada 1 segundo
 
     def setup_ui(self):
-
-        # Verificar y cargar imagen de fondo
-        if os.path.exists(f"{ADDRESS}"):
-            palette = QPalette()
-            background_img = QPixmap(f"{ADDRESS}/fondo3.png")
-            scaled_img = background_img.scaled(self.size(), Qt.IgnoreAspectRatio)
-            palette.setBrush(QPalette.Window, QBrush(scaled_img))
-            self.setPalette(palette)
-            self.setAutoFillBackground(True)
+        palette = QPalette()
+        background_img = QPixmap("assets/fondo3.png")
+        scaled_img = background_img.scaled(self.size(), Qt.IgnoreAspectRatio)
+        palette.setBrush(QPalette.Window, QBrush(scaled_img))
+        self.setPalette(palette)
+        self.setAutoFillBackground(True)
 
         # Layout principal
         main_layout = QVBoxLayout()
@@ -163,12 +160,8 @@ class MainApp(QWidget):
         
         # Logo universidad
         uni_logo = QLabel()
-        if os.path.exists(f"{ADDRESS}"):
-            uni_pixmap = QPixmap(f"{ADDRESS}/logo_uni.png")
-            uni_logo.setPixmap(uni_pixmap.scaled(100, 100, Qt.KeepAspectRatio))
-        else:
-            uni_logo.setText("Logo Universidad")
-            uni_logo.setStyleSheet("QLabel { color: white; }")
+        uni_pixmap = QPixmap("assets/logo_uni.png")
+        uni_logo.setPixmap(uni_pixmap.scaled(100, 100, Qt.KeepAspectRatio))
         logo_layout.addWidget(uni_logo)
         
         # Título central
@@ -179,12 +172,8 @@ class MainApp(QWidget):
         
         # Logo proyecto
         project_logo = QLabel()
-        if os.path.exists(f"{ADDRESS}"):
-            project_pixmap = QPixmap(f"{ADDRESS}/logo_chasqui_1.jpg")
-            project_logo.setPixmap(project_pixmap.scaled(100, 100, Qt.KeepAspectRatio))
-        else:
-            project_logo.setText("Logo Proyecto")
-            project_logo.setStyleSheet("QLabel { color: white; }")
+        project_pixmap = QPixmap("assets/logo_chasqui_1.jpg")
+        project_logo.setPixmap(project_pixmap.scaled(100, 100, Qt.KeepAspectRatio))
         logo_layout.addWidget(project_logo)
 
         main_layout.addLayout(logo_layout)
