@@ -8,5 +8,8 @@ Pasos para instalar la Interface:
 4. Instala los paquetes requeridos ejecutando en la terminal: python -m pip install -r requirements.txt
 5. Ejecuta el archivo main.py
 
-Interfaz actualizada (08/02/2025)
-![ET_Eduacional](https://github.com/user-attachments/assets/397e96b3-be8d-4a97-ad21-9c25fffcde71)
+Interfaz actualizada (02/03/2025)
+![Interfaz_Telemetria 2demarzo](https://github.com/user-attachments/assets/89eb163c-0a1b-4841-8bd8-d00e270c5d12)
+Ventana de visualizacion de datos de Telemetria: 
+![Visualizador de datos](https://github.com/user-attachments/assets/d455bc52-4a2c-49f2-a308-97ff9ee4db53)
+
