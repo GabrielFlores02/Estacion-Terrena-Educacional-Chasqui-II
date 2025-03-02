@@ -3,18 +3,14 @@ import folium
 import os
 import random
 import sqlite3
-from dotenv import load_dotenv
 from datetime import datetime
-from PyQt5.QtWidgets import QApplication, QVBoxLayout, QHBoxLayout, QGridLayout, QLabel, QWidget, QFrame
+from PyQt5.QtWidgets import QApplication, QVBoxLayout, QHBoxLayout, QGridLayout, QLabel, QWidget, QFrame, QPushButton
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 from PyQt5.QtCore import QUrl, QTimer, Qt
 from PyQt5.QtGui import QPixmap, QPalette, QBrush
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import numpy as np
-# Cargar las variables desde el archivo .env
-load_dotenv()
-ADDRESS = os.getenv("ADDRESS")
 
 class Database:
     def __init__(self):
@@ -63,6 +59,9 @@ class LiveGraph(FigureCanvas):
     def __init__(self, title, xlabel, ylabel):
         self.fig = Figure(figsize=(5, 4))
         self.ax = self.fig.add_subplot(111)
+        self.title = title  # Guardar el título como atributo
+        self.xlabel = xlabel  # Guardar el xlabel como atributo
+        self.ylabel = ylabel  # Guardar el ylabel como atributo
         self.ax.set_title(title, fontsize=10, pad=10)
         self.ax.set_xlabel(xlabel)
         self.ax.set_ylabel(ylabel)
@@ -85,10 +84,10 @@ class LiveGraph(FigureCanvas):
         x_values = np.arange(self.counter - len(self.data_y) + 1, self.counter + 1)
         self.ax.plot(x_values, self.data_y, '-o')
         
-        # Configurar límites y etiquetas
-        self.ax.set_xlabel(self.ax.get_xlabel())
-        self.ax.set_ylabel(self.ax.get_ylabel())
-        self.ax.set_title(self.ax.get_title())
+        # Restablecer los títulos usando los atributos almacenados
+        self.ax.set_xlabel(self.xlabel)
+        self.ax.set_ylabel(self.ylabel)
+        self.ax.set_title(self.title, fontsize=10, pad=10)
         self.ax.grid(True)
         
         # Ajustar el rango del eje x para mostrar siempre los últimos 20 valores
@@ -178,6 +177,28 @@ class MainApp(QWidget):
 
         main_layout.addLayout(logo_layout)
 
+        # Botón para abrir el visualizador de base de datos
+        database_btn_layout = QHBoxLayout()
+        self.database_viewer_btn = QPushButton("Ver Datos Históricos")
+        self.database_viewer_btn.setStyleSheet("""
+            QPushButton {
+                background-color: rgba(0, 100, 150, 180);
+                color: white;
+                border: 1px solid white;
+                border-radius: 5px;
+                padding: 8px;
+                font-weight: bold;
+            }
+            QPushButton:hover {
+                background-color: rgba(0, 130, 180, 180);
+            }
+        """)
+        self.database_viewer_btn.clicked.connect(self.open_database_viewer)
+        database_btn_layout.addStretch()
+        database_btn_layout.addWidget(self.database_viewer_btn)
+        database_btn_layout.addStretch()
+        main_layout.addLayout(database_btn_layout)
+
         # Layout superior
         top_layout = QGridLayout()
         top_layout.setSpacing(15)
@@ -262,6 +283,11 @@ class MainApp(QWidget):
         main_layout.addWidget(line_divisor)
         main_layout.addLayout(bottom_layout)
         self.setLayout(main_layout)
+
+    def open_database_viewer(self):
+        from database_viewer import DatabaseViewer
+        viewer = DatabaseViewer(self)
+        viewer.exec_()
 
     def update_data(self):
         # Simular datos
